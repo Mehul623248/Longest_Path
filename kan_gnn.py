@@ -42,9 +42,10 @@ class SplineActivation(nn.Module):
         self.spline_order = spline_order
         self.grid_range = grid_range
 
-        # Learnable spline coefficients
+        # Learnable spline coefficients — size must match basis output
+        # basis output size = len(grid) - spline_order = (num_knots + 2*spline_order) - spline_order = num_knots + spline_order
         self.coefficients = nn.Parameter(
-            torch.zeros(num_knots + spline_order - 1)
+            torch.zeros(num_knots + spline_order)
         )
         # Learnable blend weight between base and spline
         self.blend = nn.Parameter(torch.ones(1) * 0.1)
