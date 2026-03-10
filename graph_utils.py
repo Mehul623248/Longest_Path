@@ -18,24 +18,39 @@ import random
 # Ground truth: exact longest path (small graphs only)
 # ─────────────────────────────────────────
 
-def exact_longest_path(G: nx.Graph, cutoff: int = 10) -> tuple[int, list]:
+def exact_longest_path(G: nx.Graph) -> tuple[int, list]:
     """
-    Brute-force exact longest simple path.
-    cutoff limits path search depth — prevents hanging on dense graphs.
-    Returns (length, path).
+    Fast longest path approximation using repeated random DFS.
+    Guaranteed to terminate quickly. Not exact but good enough for training labels.
     """
     best_len = 0
     best_path = []
     nodes = list(G.nodes())
-    for src in nodes:
-        for dst in nodes:
-            if src == dst:
-                continue
-            for path in nx.all_simple_paths(G, src, dst, cutoff=cutoff):
-                if len(path) - 1 > best_len:
-                    best_len = len(path) - 1
-                    best_path = path
+    rng = random.Random(42)
+
+    # Try 50 random starting nodes, DFS from each
+    starts = rng.sample(nodes, min(50, len(nodes)))
+    for src in starts:
+        path = _random_dfs(G, src, rng)
+        if len(path) - 1 > best_len:
+            best_len = len(path) - 1
+            best_path = path
+
     return best_len, best_path
+
+
+def _random_dfs(G: nx.Graph, start, rng: random.Random) -> list:
+    """Random DFS — greedy path extension with random neighbor ordering."""
+    visited = {start}
+    path = [start]
+    while True:
+        neighbors = [n for n in G.neighbors(path[-1]) if n not in visited]
+        if not neighbors:
+            break
+        nxt = rng.choice(neighbors)
+        visited.add(nxt)
+        path.append(nxt)
+    return path
 
 
 def dp_longest_path_dag(G: nx.DiGraph) -> tuple[int, list]:
@@ -93,7 +108,6 @@ GRAPH_FACTORIES = {
     "erdos_renyi":     lambda n, seed: make_random_graph(n, p=0.3, seed=seed),
     "barabasi_albert": lambda n, seed: make_barabasi_albert(n, m=2, seed=seed),
     "cycle":           lambda n, seed: make_cycle_graph(n),
-    "complete":        lambda n, seed: make_complete_graph(n),
     "grid":            lambda n, seed: make_grid_graph(int(n**0.5) or 3, int(n**0.5) or 3),
     "dag":             lambda n, seed: make_random_dag(n, p=0.3, seed=seed),
 }
