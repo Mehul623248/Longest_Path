@@ -49,15 +49,16 @@ def make_pysr_model(
     we want to find genuinely new non-linearities, not just rediscover
     known ones.
     """
+    import sympy as sp
+    x = sp.Symbol('x')
+
     return PySRRegressor(
         niterations=iterations,
         populations=populations,
         maxsize=complexity,
 
-        # Standard operators
         binary_operators=["+", "*", "-", "/", "^"],
 
-        # Non-linear unary operators — this is where new transforms emerge
         unary_operators=[
             "sin",
             "cos",
@@ -66,19 +67,21 @@ def make_pysr_model(
             "sqrt",
             "abs",
             "tanh",
-            "sigmoid(x) = 1 / (1 + exp(-x))",          # Standard sigmoid
-            "softplus(x) = log(1 + exp(x))",            # Smooth ReLU
-            "mish(x) = x * tanh(log(1 + exp(x)))",      # Mish activation
+            "sigmoid(x) = 1 / (1 + exp(-x))",
+            "softplus(x) = log(1 + exp(x))",
+            "mish(x) = x * tanh(log(1 + exp(x)))",
             "inv(x) = 1 / x",
         ],
 
-        # Parsimony: prefer simpler expressions
+        extra_sympy_mappings={
+            "sigmoid":  lambda x: 1 / (1 + sp.exp(-x)),
+            "softplus": lambda x: sp.log(1 + sp.exp(x)),
+            "mish":     lambda x: x * sp.tanh(sp.log(1 + sp.exp(x))),
+            "inv":      lambda x: 1 / x,
+        },
+
         parsimony=0.001,
-
-        # Deterministic
         random_state=42,
-
-        # Output options
         verbosity=0,
         progress=True,
         model_selection="best",

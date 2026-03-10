@@ -56,6 +56,14 @@ PRIMITIVES = [
     ("log_abs",   lambda x: torch.log(x.abs() + 1)),
     ("sinc",      lambda x: torch.sinc(x / np.pi)),
     ("gaussian",  lambda x: torch.exp(-x ** 2)),
+    ("silu_cube",    lambda x: x * torch.sigmoid(x) + 0.5 * x**3),
+("poly_sigmoid", lambda x: (x**3) / (1 + torch.exp(-x))),
+("sixth_degree", lambda x: x**6 + x**3),
+# Run 3 hybrids — directly from symbolic regression findings
+    ("sixth_silu",    lambda x: torch.clamp(x**6 + x**3, -10, 10) * torch.sigmoid(x)),
+    ("gated_sixth",   lambda x: torch.clamp(x**6, -10, 10) / (1 + torch.exp(-x))),
+    ("cube_sixth",    lambda x: torch.clamp(x**3 + 0.5 * x**6, -10, 10)),
+    ("adaptive_silu", lambda x: x * torch.sigmoid(x * torch.tanh(torch.exp(x * (x - 0.315)).clamp(-10, 10)))),
 ]
 
 PRIMITIVE_DICT = {name: fn for name, fn in PRIMITIVES}
@@ -166,17 +174,20 @@ class TransformGNN(nn.Module):
         self.lin3 = nn.Linear(hidden * 2, 1)
 
     def forward(self, x, edge_index, batch):
-        from torch_geometric.nn import global_mean_pool, global_max_pool
+        from torch_geometric.nn import global_mean_pool, global_max_pool, SimpleConv
         from torch_geometric.utils import add_self_loops
-        from torch_scatter import scatter_add
 
         h = self.transform(self.lin1(x))
 
-        # Simple mean-aggregation message passing
-        edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
+        # Simple mean-aggregation message passing using PyG built-in
         row, col = edge_index
-        msg = h[col]
-        agg = scatter_add(msg, row, dim=0, dim_size=h.size(0))
+        num_nodes = x.size(0)
+        # Aggregate neighbor features via mean pooling per node
+        ones = torch.ones(col.size(0), 1, device=x.device)
+        deg = torch.zeros(num_nodes, 1, device=x.device).scatter_add_(0, row.unsqueeze(1), ones).clamp(min=1)
+        agg = torch.zeros(num_nodes, h.size(1), device=x.device).scatter_add_(0, row.unsqueeze(1).expand(-1, h.size(1)), h[col])
+        agg = agg / deg
+
         h = self.transform(self.lin2(agg))
 
         h_mean = global_mean_pool(h, batch)
