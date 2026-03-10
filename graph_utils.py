@@ -18,10 +18,10 @@ import random
 # Ground truth: exact longest path (small graphs only)
 # ─────────────────────────────────────────
 
-def exact_longest_path(G: nx.Graph) -> tuple[int, list]:
+def exact_longest_path(G: nx.Graph, cutoff: int = 10) -> tuple[int, list]:
     """
     Brute-force exact longest simple path.
-    Only feasible for |V| <= ~20.
+    cutoff limits path search depth — prevents hanging on dense graphs.
     Returns (length, path).
     """
     best_len = 0
@@ -31,7 +31,7 @@ def exact_longest_path(G: nx.Graph) -> tuple[int, list]:
         for dst in nodes:
             if src == dst:
                 continue
-            for path in nx.all_simple_paths(G, src, dst):
+            for path in nx.all_simple_paths(G, src, dst, cutoff=cutoff):
                 if len(path) - 1 > best_len:
                     best_len = len(path) - 1
                     best_path = path
@@ -146,8 +146,8 @@ def graph_to_pyg(G: nx.Graph, longest_path_len: int) -> Data:
 
 def build_dataset(
     num_graphs: int = 1000,
-    min_nodes: int = 5,
-    max_nodes: int = 15,
+    min_nodes: int = 4,
+    max_nodes: int = 10,   # kept small — exact solver is exponential
     graph_types: Optional[list] = None,
     seed: int = 42,
     verbose: bool = True,
