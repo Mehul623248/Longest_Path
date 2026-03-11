@@ -1,0 +1,139 @@
+{
+  "stages": {
+    "training": {
+      "best_epoch": 44,
+      "best_val_loss": 0.00673856757581234,
+      "best_val_mae": 0.09630855739116669
+    },
+    "symbolic_regression": {
+      "novel_activations_found": 15,
+      "novel_expressions": [
+        {
+          "name": "conv2_msg_ch11",
+          "expression": "x0/(1 + exp(-(-x0 - 0.0050977236)/(-1.0035204)))",
+          "r2": 0.9999977163302655
+        },
+        {
+          "name": "conv1_upd_ch17",
+          "expression": "x0/(exp(-x0 + sin(-0.019132566/Abs(x0))*tanh(log(exp(sin(-0.019132566/Abs(x0))) + 1))) + 1)",
+          "r2": 0.9999991214997822
+        },
+        {
+          "name": "conv0_upd_ch6",
+          "expression": "x0/(1 + exp(-x0)) - 1*(-0.0011326238)",
+          "r2": 0.9999963248414806
+        },
+        {
+          "name": "conv0_upd_ch19",
+          "expression": "(x0/(1 + 1.00992248865271*exp(-x0)) - 1*0.0019165736)/0.998449",
+          "r2": 0.9999979641679262
+        },
+        {
+          "name": "conv2_upd_ch2",
+          "expression": "x0/(1 + exp(-x0)) - 1*0.0010416599",
+          "r2": 0.9999961935849666
+        },
+        {
+          "name": "conv0_upd_ch0",
+          "expression": "x0/(1 + exp(-x0/0.9928322)) - 0.0028323329",
+          "r2": 0.9999983312351697
+        },
+        {
+          "name": "conv1_msg_ch29",
+          "expression": "x0/(1 + exp(-x0))",
+          "r2": 0.9999969168025653
+        },
+        {
+          "name": "conv1_upd_ch2",
+          "expression": "0.003562078 + (x0 - 1*0.008827902)/(1 + 0.983820549456053*exp(-x0))",
+          "r2": 0.9999981445537984
+        },
+        {
+          "name": "conv1_msg_ch25",
+          "expression": "(x0 - 0.002943523)/(1 + exp(-1*x0*1.006798))",
+          "r2": 0.9999991312943896
+        },
+        {
+          "name": "conv1_msg_ch1",
+          "expression": "x0*0.9981661/(1 + exp(-1*(x0 + 0.013954401)*1.0054847))",
+          "r2": 0.9999992324008459
+        },
+        {
+          "name": "conv2_msg_ch10",
+          "expression": "x0/(1 + exp(-1*(x0 - 1*0.007182081)*1.0018936))",
+          "r2": 0.9999991905570473
+        },
+        {
+          "name": "conv2_msg_ch1",
+          "expression": "x0/(1 + 1.0075178454628*exp(-x0))",
+          "r2": 0.9999990625970044
+        },
+        {
+          "name": "conv0_msg_ch15",
+          "expression": "x0/(exp(-x0 - 1*sin(x0)*(-0.01240683)) + 1) - 1*(-0.0016221686)",
+          "r2": 0.9999987458422354
+        },
+        {
+          "name": "conv0_msg_ch19",
+          "expression": "x0/(1 + exp(-x0))",
+          "r2": 0.9999974105463634
+        },
+        {
+          "name": "conv0_upd_ch21",
+          "expression": "x0*0.995975*(-1*(-0.0016869678) + 1/(1 + exp(-1*x0*1.0108732)))",
+          "r2": 0.9999982940500202
+        }
+      ]
+    },
+    "evolution": {
+      "top_transforms": [
+        {
+          "rank": 1,
+          "name": "blend(perturb(cube,1.06,0.04),square,0.55)",
+          "fitness": -0.006992073357105255,
+          "parents": [
+            "perturb(cube,1.06,0.04)",
+            "square"
+          ],
+          "gen": 2
+        },
+        {
+          "rank": 2,
+          "name": "perturb(cube,0.98,0.06)",
+          "fitness": -0.007393875904381275,
+          "parents": [
+            "cube"
+          ],
+          "gen": 1
+        },
+        {
+          "rank": 3,
+          "name": "blend(perturb(cube,1.06,0.04),cube,0.34)",
+          "fitness": -0.00796976126730442,
+          "parents": [
+            "perturb(cube,1.06,0.04)",
+            "cube"
+          ],
+          "gen": 2
+        },
+        {
+          "rank": 4,
+          "name": "sixth_degree",
+          "fitness": -0.008142116852104664,
+          "parents": [],
+          "gen": 0
+        },
+        {
+          "rank": 5,
+          "name": "blend(perturb(cube,0.98,0.06),blend(perturb(cube,1.06,0.04),square,0.55),0.51)",
+          "fitness": -0.00870182178914547,
+          "parents": [
+            "perturb(cube,0.98,0.06)",
+            "blend(perturb(cube,1.06,0.04),square,0.55)"
+          ],
+          "gen": 3
+        }
+      ]
+    }
+  }
+}

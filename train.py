@@ -89,7 +89,7 @@ def evaluate(model, loader, device, criterion):
     n = 0
     for batch in loader:
         batch = batch.to(device)
-        pred = model(batch.x, batch.edge_index, batch.batch)
+        pred = model(batch.x, batch.edge_index, batch.batch, getattr(batch, 'edge_attr', None))
         loss = criterion(pred, batch.y)
         mae  = (pred - batch.y).abs().mean()
         total_loss += loss.item() * batch.num_graphs
@@ -122,8 +122,8 @@ def train(config: dict):
     train_data, val_data = train_test_split(
         dataset, train_size=config["train_split"], random_state=config["seed"]
     )
-    train_loader = DataLoader(train_data, batch_size=config["batch_size"], shuffle=True,  num_workers=4)
-    val_loader   = DataLoader(val_data,   batch_size=config["batch_size"], shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_data, batch_size=config["batch_size"], shuffle=True,  num_workers=0)
+    val_loader   = DataLoader(val_data,   batch_size=config["batch_size"], shuffle=False, num_workers=0)
     print(f"   Train: {len(train_data)} | Val: {len(val_data)}")
 
     # ── Model ──
@@ -160,7 +160,7 @@ def train(config: dict):
         for batch in train_loader:
             batch = batch.to(device)
             optimizer.zero_grad()
-            pred = model(batch.x, batch.edge_index, batch.batch)
+            pred = model(batch.x, batch.edge_index, batch.batch, getattr(batch, 'edge_attr', None))
             loss = criterion(pred, batch.y)
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), config["grad_clip"])

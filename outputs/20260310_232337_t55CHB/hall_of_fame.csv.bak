@@ -1,0 +1,5 @@
+Complexity,Loss,Equation
+1,0.9415526,"0.54490775"
+2,0.010359216,"mish(x0)"
+3,0.008431513,"mish(mish(x0))"
+4,5.092675e-8,"x0 * sigmoid(x0)"

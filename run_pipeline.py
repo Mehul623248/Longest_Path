@@ -229,6 +229,14 @@ def main():
 
     if args.stage in ("symbolic", "all"):
         symbolic_results = stage_symbolic(args)
+    elif args.stage == "evolve":
+        # --- NEW: Load the JSON manually if skipping the symbolic stage ---
+        sym_path = os.path.join(args.symbolic_dir, "symbolic_results.json")
+        if os.path.exists(sym_path):
+            with open(sym_path, "r") as f:
+                sym_data = json.load(f)
+                symbolic_results = sym_data.get("symbolic_results", [])
+                print(f"Loaded {len(symbolic_results)} expressions from previous symbolic run.")
 
     if args.stage in ("evolve", "all"):
         stage_evolve(args, symbolic_results)

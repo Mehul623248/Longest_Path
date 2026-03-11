@@ -1,0 +1,10 @@
+Complexity,Loss,Equation
+1,0.11486131,"0.51494074"
+2,0.06566391,"sigmoid(x1)"
+4,0.06396499,"mish(tanh(softplus(x1)))"
+5,0.063483074,"sin(tanh(mish(softplus(x1))))"
+6,0.06300323,"mish(sin(softplus(x1))) * 0.93899834"
+7,0.06294753,"sin(sin(mish(softplus(x1)))) * 0.95522183"
+8,0.061741445,"sqrt(cos(x0)) * mish(sin(softplus(x1)))"
+9,0.061564784,"sin(sqrt(cos(x0)) * sin(mish(softplus(x1))))"
+10,0.061543133,"sin(sin(mish(softplus(x1))) * cos(tanh(mish(x0))))"

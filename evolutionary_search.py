@@ -173,8 +173,8 @@ class TransformGNN(nn.Module):
         self.lin2 = nn.Linear(hidden, hidden)
         self.lin3 = nn.Linear(hidden * 2, 1)
 
-    def forward(self, x, edge_index, batch):
-        from torch_geometric.nn import global_mean_pool, global_max_pool, SimpleConv
+    def forward(self, x, edge_index, batch, edge_attr=None): 
+        from torch_geometric.nn import global_mean_pool, global_max_pool
         from torch_geometric.utils import add_self_loops
 
         h = self.transform(self.lin1(x))
@@ -228,6 +228,7 @@ def evaluate_transform(
         return val_loss
 
     except Exception as e:
+        print(f"  [ERROR] Transform failed: {e}")
         return float("inf")
 
 

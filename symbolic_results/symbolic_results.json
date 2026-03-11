@@ -1,0 +1,195 @@
+{
+  "novelty_scores": {
+    "conv0_msg_2D": {
+      "best_match": "2D_Multi_Variable",
+      "r2": 0.0,
+      "is_novel": true
+    },
+    "conv1_msg_2D": {
+      "best_match": "2D_Multi_Variable",
+      "r2": 0.0,
+      "is_novel": true
+    },
+    "conv2_msg_2D": {
+      "best_match": "2D_Multi_Variable",
+      "r2": 0.0,
+      "is_novel": true
+    }
+  },
+  "symbolic_results": [
+    {
+      "name": "conv0_msg_2D",
+      "expression": "x1*0.35722908*log(exp(x0) + 1)",
+      "r2": 0.8871780462148311,
+      "complexity": 6,
+      "all_equations": [
+        {
+          "expr": "0.156069740000000",
+          "complexity": 1,
+          "loss": 0.0028253563
+        },
+        {
+          "expr": "x1*0.3219991",
+          "complexity": 3,
+          "loss": 0.001106067
+        },
+        {
+          "expr": "x1**1.023236*0.32667464",
+          "complexity": 5,
+          "loss": 0.0011051062
+        },
+        {
+          "expr": "x1*0.35722908*log(exp(x0) + 1)",
+          "complexity": 6,
+          "loss": 0.0003187622
+        },
+        {
+          "expr": "(x0 + 1.3537732)*x1*0.1884391",
+          "complexity": 7,
+          "loss": 0.00030246252
+        },
+        {
+          "expr": "(x0 + x1*(x1 + 1.9985427))*0.099474214",
+          "complexity": 9,
+          "loss": 0.00023939976
+        },
+        {
+          "expr": "x0*0.100091346 + x1*x1*0.2881167 + 0.048499633",
+          "complexity": 11,
+          "loss": 0.00022457063
+        }
+      ],
+      "novelty": {
+        "best_match": "2D_Multi_Variable",
+        "r2": 0.0,
+        "is_novel": true
+      }
+    },
+    {
+      "name": "conv1_msg_2D",
+      "expression": "1/(1 + exp(-x1))",
+      "r2": 0.4283201729220574,
+      "complexity": 2,
+      "all_equations": [
+        {
+          "expr": "0.514940740000000",
+          "complexity": 1,
+          "loss": 0.11486131
+        },
+        {
+          "expr": "1/(1 + exp(-x1))",
+          "complexity": 2,
+          "loss": 0.06566391
+        },
+        {
+          "expr": "tanh(log(exp(x1) + 1))*tanh(log(exp(tanh(log(exp(x1) + 1))) + 1))",
+          "complexity": 4,
+          "loss": 0.06396499
+        },
+        {
+          "expr": "sin(tanh(log(exp(x1) + 1)*tanh(log(exp(x1) + 2))))",
+          "complexity": 5,
+          "loss": 0.063483074
+        },
+        {
+          "expr": "(sin(log(exp(x1) + 1))*tanh(log(exp(sin(log(exp(x1) + 1))) + 1)))*0.93899834",
+          "complexity": 6,
+          "loss": 0.06300323
+        },
+        {
+          "expr": "sin(sin(log(exp(x1) + 1)*tanh(log(exp(x1) + 2))))*0.95522183",
+          "complexity": 7,
+          "loss": 0.06294753
+        },
+        {
+          "expr": "sin(log(exp(x1) + 1))*sqrt(cos(x0))*tanh(log(exp(sin(log(exp(x1) + 1))) + 1))",
+          "complexity": 8,
+          "loss": 0.061741445
+        },
+        {
+          "expr": "sin(sin(log(exp(x1) + 1)*tanh(log(exp(x1) + 2)))*sqrt(cos(x0)))",
+          "complexity": 9,
+          "loss": 0.061564784
+        },
+        {
+          "expr": "sin(sin(log(exp(x1) + 1)*tanh(log(exp(x1) + 2)))*cos(tanh(x0*tanh(log(exp(x0) + 1)))))",
+          "complexity": 10,
+          "loss": 0.061543133
+        }
+      ],
+      "novelty": {
+        "best_match": "2D_Multi_Variable",
+        "r2": 0.0,
+        "is_novel": true
+      }
+    },
+    {
+      "name": "conv2_msg_2D",
+      "expression": "(x1*tanh(log(exp(x1) + 1)))*0.20890324",
+      "r2": 0.024560162307692868,
+      "complexity": 4,
+      "all_equations": [
+        {
+          "expr": "0.110499350000000",
+          "complexity": 1,
+          "loss": 0.4536281
+        },
+        {
+          "expr": "x1*0.15769964",
+          "complexity": 3,
+          "loss": 0.44696316
+        },
+        {
+          "expr": "(x1*tanh(log(exp(x1) + 1)))*0.20890324",
+          "complexity": 4,
+          "loss": 0.44248697
+        },
+        {
+          "expr": "0.21375038*Abs(x1*tanh(log(exp(x1) + 1)))",
+          "complexity": 5,
+          "loss": 0.4413955
+        },
+        {
+          "expr": "sin(x1)*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)) + 1))) + 1))*tanh(log(exp(sin(x1)) + 1))",
+          "complexity": 6,
+          "loss": 0.4395731
+        },
+        {
+          "expr": "sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))",
+          "complexity": 7,
+          "loss": 0.4362738
+        },
+        {
+          "expr": "sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))",
+          "complexity": 8,
+          "loss": 0.4353086
+        },
+        {
+          "expr": "Abs(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)) + 1))) + 1))*tanh(log(exp(sin(x1 - 0.21342593)) + 1)))",
+          "complexity": 9,
+          "loss": 0.43460903
+        },
+        {
+          "expr": "Abs((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)) - 0.0867947)*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)) - 0.0867947)*tanh(log(0.916865308760302*exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1))) + 1))*tanh(log(0.916865308760302*exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))) + 1)))",
+          "complexity": 10,
+          "loss": 0.43399262
+        },
+        {
+          "expr": "sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1)))) + 1))/cos(x0)",
+          "complexity": 11,
+          "loss": 0.43295228
+        },
+        {
+          "expr": "sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp((sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1)))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)) + 1))*tanh(log(exp(sin(x1*tanh(log(exp(x1) + 1))*tanh(log(exp(x1*tanh(log(exp(x1) + 1))) + 1)))) + 1))/cos(x0)",
+          "complexity": 12,
+          "loss": 0.43177128
+        }
+      ],
+      "novelty": {
+        "best_match": "2D_Multi_Variable",
+        "r2": 0.0,
+        "is_novel": true
+      }
+    }
+  ]
+}

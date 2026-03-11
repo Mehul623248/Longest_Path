@@ -104,17 +104,20 @@ def analyze_activation(
     Returns the best symbolic expression found.
     """
     # Reshape for PySR
-    X = x_vals.reshape(-1, 1)
+   # --- FIX: Don't flatten 2D data! ---
+    if len(x_vals.shape) == 1:
+        X = x_vals.reshape(-1, 1)
+    else:
+        X = x_vals # It is already our 2D (Weight, Degree) matrix!
+        
     y = y_vals.reshape(-1)
 
-    # Filter out NaN/inf
-    mask = np.isfinite(X[:, 0]) & np.isfinite(y)
+    mask = np.isfinite(X).all(axis=1) & np.isfinite(y)
     X, y = X[mask], y[mask]
 
     if len(X) < 10:
         return {"name": name, "expression": "insufficient_data", "r2": 0.0}
 
-    # Fit
     model.fit(X, y)
 
     # Get best equation
@@ -122,9 +125,9 @@ def analyze_activation(
     r2 = float(model.score(X, y))
 
     result = {
-        "name":       name,
+        "name": name,
         "expression": str(best_eq),
-        "r2":         r2,
+        "r2": r2,
         "complexity": int(model.get_best()["complexity"]),
         "all_equations": [
             {
@@ -137,7 +140,11 @@ def analyze_activation(
     }
 
     # Plot
-    _plot_activation(name, x_vals, y_vals, model, output_dir)
+    # _plot_activation(name, x_vals, y_vals, model, output_dir)
+    if X.shape[1] == 1:
+        _plot_activation(name, x_vals, y_vals, model, output_dir)
+    else:
+        print(f"  [Skipping plot for 2D function: {name}]")
 
     return result
 
@@ -198,6 +205,9 @@ def novelty_score(
     Compare learned activation to known activations.
     Returns the best match and a novelty score (1 = completely novel).
     """
+    if len(x_vals.shape) > 1 and x_vals.shape[1] > 1:
+        return {"best_match": "2D_Multi_Variable", "r2": 0.0, "is_novel": True}
+    
     best_r2 = -np.inf
     best_name = "unknown"
 

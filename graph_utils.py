@@ -120,14 +120,17 @@ GRAPH_FACTORIES = {
 def graph_to_pyg(G: nx.Graph, longest_path_len: int) -> Data:
     """
     Convert networkx graph to PyTorch Geometric Data.
-    Node features: degree, clustering coeff, betweenness centrality (normalized).
-    Target: normalized longest path length.
+    Node features: degree (normalized), clustering coeff, betweenness centrality.
+    Edge features: weight (normalized).
     """
     n = G.number_of_nodes()
-    # Relabel to integers if needed (e.g. grid graphs use tuple nodes)
     G = nx.convert_node_labels_to_integers(G)
 
-    degrees = np.array([d for _, d in G.degree()], dtype=np.float32)
+    # --- NORMALIZATION 1: Node Degrees ---
+    raw_degrees = np.array([d for _, d in G.degree()], dtype=np.float32)
+    # Divide by the theoretical maximum degree (n - 1) to squish to [0.0, 1.0]
+    normalized_degrees = raw_degrees / max(n - 1, 1)
+    
     clustering = np.array(list(nx.clustering(G).values()), dtype=np.float32)
     try:
         betweenness = np.array(
@@ -137,22 +140,33 @@ def graph_to_pyg(G: nx.Graph, longest_path_len: int) -> Data:
     except Exception:
         betweenness = np.zeros(n, dtype=np.float32)
 
+    # Stack the normalized features
     x = torch.tensor(
-        np.stack([degrees, clustering, betweenness], axis=1),
+        np.stack([normalized_degrees, clustering, betweenness], axis=1),
         dtype=torch.float
     )
 
-    edge_index = torch.tensor(
-        list(G.edges()), dtype=torch.long
-    ).t().contiguous()
+    # --- NORMALIZATION 2: Edge Weights ---
+    edge_index_list = list(G.edges())
+    weights = []
+    for u, v in edge_index_list:
+        if 'weight' not in G[u][v]:
+            G[u][v]['weight'] = float(np.random.randint(1, 10))
+            
+        # Divide by 10.0 (the max possible weight) to squish to [0.1, 1.0]
+        normalized_weight = G[u][v]['weight'] / 10.0
+        weights.append(normalized_weight)
 
-    # Make undirected (add reverse edges)
+    edge_index = torch.tensor(edge_index_list, dtype=torch.long).t().contiguous()
+    edge_attr = torch.tensor(weights, dtype=torch.float).unsqueeze(1)
+
+    # Make undirected
     edge_index = torch.cat([edge_index, edge_index.flip(0)], dim=1)
+    edge_attr = torch.cat([edge_attr, edge_attr], dim=0)
 
     y = torch.tensor([longest_path_len / max(n - 1, 1)], dtype=torch.float)
 
-    return Data(x=x, edge_index=edge_index, y=y, num_nodes=n)
-
+    return Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=y, num_nodes=n)
 
 # ─────────────────────────────────────────
 # Dataset builder

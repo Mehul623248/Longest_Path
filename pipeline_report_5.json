@@ -1,0 +1,77 @@
+{
+  "stages": {
+    "training": {
+      "best_epoch": 10,
+      "best_val_loss": 0.025470763444900513,
+      "best_val_mae": 0.3046460747718811
+    },
+    "symbolic_regression": {
+      "novel_activations_found": 3,
+      "novel_expressions": [
+        {
+          "name": "conv0_msg_2D",
+          "expression": "log(sqrt(1.4064934**(x0 + x1)) + 0.13046117)",
+          "r2": 0.9881115446550027
+        },
+        {
+          "name": "conv1_msg_2D",
+          "expression": "0.7829055**x0",
+          "r2": 0.3980263969134934
+        },
+        {
+          "name": "conv2_msg_2D",
+          "expression": "(x0 - 1*4.0939856)*0.049405474",
+          "r2": 0.2707418573241276
+        }
+      ]
+    },
+    "evolution": {
+      "top_transforms": [
+        {
+          "rank": 1,
+          "name": "residual(tanh,0.50)",
+          "fitness": -0.01540300827473402,
+          "parents": [
+            "tanh"
+          ],
+          "gen": 1
+        },
+        {
+          "rank": 2,
+          "name": "tanh",
+          "fitness": -0.022601814940571785,
+          "parents": [],
+          "gen": 0
+        },
+        {
+          "rank": 3,
+          "name": "perturb(tanh,0.85,-0.06)",
+          "fitness": -0.02368822991847992,
+          "parents": [
+            "tanh"
+          ],
+          "gen": 1
+        },
+        {
+          "rank": 4,
+          "name": "perturb(tanh,0.98,-0.01)",
+          "fitness": -0.023844853043556213,
+          "parents": [
+            "tanh"
+          ],
+          "gen": 1
+        },
+        {
+          "rank": 5,
+          "name": "blend(tanh,softplus,0.50)",
+          "fitness": -0.025235172361135483,
+          "parents": [
+            "tanh",
+            "softplus"
+          ],
+          "gen": 1
+        }
+      ]
+    }
+  }
+}

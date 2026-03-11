@@ -1,0 +1,95 @@
+[
+  {
+    "rank": 1,
+    "name": "perturb(residual(residual(silu_cube,0.73),0.81),0.92,-0.07)",
+    "fitness": -0.006845348514616489,
+    "parents": [
+      "residual(residual(silu_cube,0.73),0.81)"
+    ],
+    "gen": 3
+  },
+  {
+    "rank": 2,
+    "name": "blend(perturb(residual(silu_cube,0.73),0.98,0.06),residual(residual(silu_cube,0.73),0.81),0.41)",
+    "fitness": -0.00978689668700099,
+    "parents": [
+      "perturb(residual(silu_cube,0.73),0.98,0.06)",
+      "residual(residual(silu_cube,0.73),0.81)"
+    ],
+    "gen": 3
+  },
+  {
+    "rank": 3,
+    "name": "perturb(residual(silu_cube,0.73),0.98,0.06)",
+    "fitness": -0.01402282454073429,
+    "parents": [
+      "residual(silu_cube,0.73)"
+    ],
+    "gen": 2
+  },
+  {
+    "rank": 4,
+    "name": "perturb(residual(residual(silu_cube,0.73),0.81),1.04,-0.01)",
+    "fitness": -0.014061024039983749,
+    "parents": [
+      "residual(residual(silu_cube,0.73),0.81)"
+    ],
+    "gen": 3
+  },
+  {
+    "rank": 5,
+    "name": "residual(residual(silu_cube,0.73),0.81)",
+    "fitness": -0.014461475610733032,
+    "parents": [
+      "residual(silu_cube,0.73)"
+    ],
+    "gen": 2
+  },
+  {
+    "rank": 6,
+    "name": "cube",
+    "fitness": -0.01496319230645895,
+    "parents": [],
+    "gen": 0
+  },
+  {
+    "rank": 7,
+    "name": "blend(cube,silu_cube,0.60)",
+    "fitness": -0.015071110799908638,
+    "parents": [
+      "cube",
+      "silu_cube"
+    ],
+    "gen": 1
+  },
+  {
+    "rank": 8,
+    "name": "blend(cube,perturb(residual(silu_cube,0.73),0.98,0.06),0.32)",
+    "fitness": -0.015685394406318665,
+    "parents": [
+      "cube",
+      "perturb(residual(silu_cube,0.73),0.98,0.06)"
+    ],
+    "gen": 3
+  },
+  {
+    "rank": 9,
+    "name": "blend(perturb(residual(silu_cube,0.73),0.98,0.06),blend(cube,silu_cube,0.60),0.37)",
+    "fitness": -0.01914891228079796,
+    "parents": [
+      "perturb(residual(silu_cube,0.73),0.98,0.06)",
+      "blend(cube,silu_cube,0.60)"
+    ],
+    "gen": 3
+  },
+  {
+    "rank": 10,
+    "name": "blend(residual(residual(silu_cube,0.73),0.81),cube,0.48)",
+    "fitness": -0.019305473566055296,
+    "parents": [
+      "residual(residual(silu_cube,0.73),0.81)",
+      "cube"
+    ],
+    "gen": 3
+  }
+]

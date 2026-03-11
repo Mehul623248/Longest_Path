@@ -121,7 +121,8 @@ class KANConv(MessagePassing):
         self.out_channels = out_channels
 
         # Linear projections
-        self.lin_msg  = nn.Linear(in_channels, out_channels, bias=False)
+        # CHANGE: in_channels + 1 to account for the incoming edge weight
+        self.lin_msg  = nn.Linear(in_channels + 1, out_channels, bias=False)
         self.lin_self = nn.Linear(in_channels, out_channels, bias=False)
         self.lin_out  = nn.Linear(out_channels, out_channels, bias=False)
 
@@ -130,23 +131,48 @@ class KANConv(MessagePassing):
         self.act_upd  = nn.ModuleList([SplineActivation(num_knots) for _ in range(out_channels)])
 
         self.norm = nn.LayerNorm(out_channels)
+        self.pysr_data = []
 
-    def forward(self, x, edge_index):
-        # Add self-loops and compute degree normalization
-        edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
+    def forward(self, x, edge_index, edge_attr=None): # <-- Add edge_attr
+        # Add self-loops (and pad edge_attr with 0s for self-loops)
+        if edge_attr is not None:
+            edge_index, edge_attr = add_self_loops(
+                edge_index, edge_attr, fill_value=0.0, num_nodes=x.size(0)
+            )
+        else:
+            edge_index, _ = add_self_loops(edge_index, num_nodes=x.size(0))
+
         row, col = edge_index
         deg = degree(col, x.size(0), dtype=x.dtype)
         deg_inv_sqrt = deg.pow(-0.5)
         deg_inv_sqrt[deg_inv_sqrt == float('inf')] = 0
         norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
 
-        return self.propagate(edge_index, x=x, norm=norm)
+        # Pass edge_attr down to the message function
+        return self.propagate(edge_index, x=x, norm=norm, edge_attr=edge_attr)
 
-    def message(self, x_j, norm):
-        # Project neighbor features
-        msg = self.lin_msg(x_j)
-        # Apply per-channel learnable activations
+    def message(self, x_j, norm, edge_attr): # <-- Accept edge_attr
+        # --- NEW: Mix Node Features with Edge Weight ---
+        if edge_attr is not None:
+            combined_features = torch.cat([x_j, edge_attr], dim=-1)
+        else:
+            # Fallback if no weights exist (pads with 1s)
+            combined_features = torch.cat([x_j, torch.ones((x_j.size(0), 1), device=x_j.device)], dim=-1)
+
+        # Project neighbor features + weight
+        msg = self.lin_msg(combined_features)
+        
+        # Apply per-channel learnable splines
         msg = self._apply_channel_activations(msg, self.act_msg)
+
+        if self.training:
+            # Append the data to the conv layer's list
+            self.pysr_data.append({
+                "degree": x_j[:, 0].detach().cpu(),
+                # If edge_attr exists, grab column 0. Otherwise, use 1s.
+                "weight": edge_attr[:, 0].detach().cpu() if edge_attr is not None else torch.ones_like(x_j[:, 0]),
+                "output": msg[:, 0].detach().cpu()
+            })
         return norm.view(-1, 1) * msg
 
     def update(self, aggr_out, x):
@@ -223,15 +249,18 @@ class KANGNN(nn.Module):
             nn.Sigmoid(),  # Output in [0, 1] — normalized path length
         )
 
-    def forward(self, x, edge_index, batch):
+    def forward(self, x, edge_index, batch, edge_attr=None): # <-- Add edge_attr
         # Input projection
         h = self.input_proj(x)
         h = torch.stack([self.input_act(h[:, i]) for i in range(h.size(1))], dim=1)
 
         # Message passing
         for conv in self.convs:
-            h = h + conv(h, edge_index)  # Residual connections
+            # Pass edge_attr into the conv layers
+            h = h + conv(h, edge_index, edge_attr) 
             h = F.dropout(h, p=self.dropout, training=self.training)
+            
+        # ... (rest of the method stays the same)
 
         # Global pooling
         h_mean = global_mean_pool(h, batch)
@@ -242,20 +271,29 @@ class KANGNN(nn.Module):
 
     def extract_activations(self) -> dict:
         """
-        Extract all learned activation functions from the model.
-        Returns dict of {name: (x_values, y_values)} for symbolic regression.
+        Extract the 2D observational data (Weight, Degree) -> Output 
+        for PySR to run multi-variable regression.
         """
         activations = {}
-
-        # Input activation
-        x_v, y_v = self.input_act.get_learned_values()
-        activations["input"] = (x_v, y_v)
-
-        # Conv layer activations
         for layer_idx, conv in enumerate(self.convs):
-            for name, (x_v, y_v) in conv.get_all_activations().items():
-                activations[f"conv{layer_idx}_{name}"] = (x_v, y_v)
-
+            if hasattr(conv, 'pysr_data') and len(conv.pysr_data) > 0:
+                # Concatenate all the data collected over the epochs
+                deg = torch.cat([d['degree'] for d in conv.pysr_data])
+                wt = torch.cat([d['weight'] for d in conv.pysr_data])
+                out = torch.cat([d['output'] for d in conv.pysr_data])
+                
+                # Stack into a 2D matrix: Column 0 = Weight (x0), Column 1 = Degree (x1)
+                X = torch.stack([wt, deg], dim=1).numpy()
+                y = out.numpy()
+                
+                # Randomly sample 1000 points so PySR doesn't choke on massive arrays
+                import numpy as np
+                if len(X) > 1000:
+                    idx = np.random.choice(len(X), 1000, replace=False)
+                    X, y = X[idx], y[idx]
+                    
+                activations[f"conv{layer_idx}_msg_2D"] = (X, y)
+                
         return activations
 
 
