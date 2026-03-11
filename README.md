@@ -88,10 +88,10 @@ T(graph structure) → low-dimensional space
 Analogous to how the Quantum Fourier Transform collapses factorization's 
 exponential search space by revealing periodic structure.
 
-The pipeline cannot prove P=NP. But it can:
+This pipeline cannot prove P=NP. But it can:
 1. Find better practical heuristics for typical graph instances
 2. Reveal mathematical structure worth investigating theoretically  
-3. Narrow the search space for human mathematical insight
+3. Narrow the search space for mathematical insight
 
 ## Multi-GPU notes
 

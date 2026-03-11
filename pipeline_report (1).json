@@ -1,0 +1,141 @@
+{
+  "stages": {
+    "training": {
+      "best_epoch": 116,
+      "best_val_loss": 0.001651394353248179,
+      "best_val_mae": 0.03433337539434433
+    },
+    "symbolic_regression": {
+      "novel_activations_found": 15,
+      "novel_expressions": [
+        {
+          "name": "conv0_msg_ch29",
+          "expression": "x0/(1 + exp(-x0))",
+          "r2": 0.9998893548974076
+        },
+        {
+          "name": "conv1_upd_ch16",
+          "expression": "x0*0.99358064/(1 + exp(-1*x0*1.0361787))",
+          "r2": 0.9999601321404609
+        },
+        {
+          "name": "conv1_upd_ch56",
+          "expression": "(x0 - 0.011364364)/(1 + exp(-1*x0*1.0308588))",
+          "r2": 0.9999741912883354
+        },
+        {
+          "name": "conv1_upd_ch43",
+          "expression": "x0/(1 + exp(-x0/0.96682906)) - 1*0.007962839",
+          "r2": 0.9999690850421946
+        },
+        {
+          "name": "conv1_msg_ch62",
+          "expression": "x0/(exp(-x0 - 1*x0*tanh(log(exp(x0) + 1))*sin(x0)*0.05268406) + 1)",
+          "r2": 0.9999888818450764
+        },
+        {
+          "name": "input",
+          "expression": "0.9927851**sin(2.228534*Abs(x0))*x0/(1 + exp(-x0))",
+          "r2": 0.9999793137120456
+        },
+        {
+          "name": "conv1_msg_ch5",
+          "expression": "x0/(exp(-x0 - 0.052493334*tanh(cos(x0))) + 1)",
+          "r2": 0.9999782192489103
+        },
+        {
+          "name": "conv1_msg_ch33",
+          "expression": "x0/(exp(-x0 + sin(log(exp(x0) + 1))*0.03570955) + 1)",
+          "r2": 0.999974342136015
+        },
+        {
+          "name": "conv1_msg_ch43",
+          "expression": "x0*(-1*0.0036071881 + 1/(1 + 0.942700613301996*exp(-x0)))",
+          "r2": 0.9999919040284941
+        },
+        {
+          "name": "conv1_msg_ch9",
+          "expression": "x0/(1 + exp(-x0)) + cos(x0/0.5773674)*(-0.0061319987)",
+          "r2": 0.9999867184179857
+        },
+        {
+          "name": "conv0_upd_ch29",
+          "expression": "x0/(1 + exp(-x0)) - 1*(-0.0037974354)",
+          "r2": 0.9999762479464835
+        },
+        {
+          "name": "conv1_upd_ch35",
+          "expression": "x0/(1 + 1.0167488177185*exp(-x0))",
+          "r2": 0.9999828709640254
+        },
+        {
+          "name": "conv0_msg_ch54",
+          "expression": "x0/(1 + exp(-x0*tanh(exp(x0*(x0 - 0.32272416)))))",
+          "r2": 0.9999956514645656
+        },
+        {
+          "name": "conv0_msg_ch53",
+          "expression": "x0/(1 + exp(-x0))",
+          "r2": 0.9999804641186423
+        },
+        {
+          "name": "conv0_upd_ch35",
+          "expression": "x0/(1 + exp(-x0))",
+          "r2": 0.9999777763232605
+        }
+      ]
+    },
+    "evolution": {
+      "top_transforms": [
+        {
+          "rank": 1,
+          "name": "blend(blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68),perturb(blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68),1.11,-0.04),0.47)",
+          "fitness": -0.002904353570193052,
+          "parents": [
+            "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68)",
+            "perturb(blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68),1.11,-0.04)"
+          ],
+          "gen": 9
+        },
+        {
+          "rank": 2,
+          "name": "perturb(blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68),1.11,-0.04)",
+          "fitness": -0.003346191439777613,
+          "parents": [
+            "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68)"
+          ],
+          "gen": 8
+        },
+        {
+          "rank": 3,
+          "name": "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68)",
+          "fitness": -0.0037487332709133627,
+          "parents": [
+            "blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57)",
+            "blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52)"
+          ],
+          "gen": 7
+        },
+        {
+          "rank": 4,
+          "name": "perturb(blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.63),0.36),1.00,0.07)",
+          "fitness": -0.003895897138863802,
+          "parents": [
+            "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.63),0.36)"
+          ],
+          "gen": 8
+        },
+        {
+          "rank": 5,
+          "name": "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.63),blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68),0.48)",
+          "fitness": -0.003952931798994541,
+          "parents": [
+            "blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.63)",
+            "blend(blend(blend(blend(cube,perturb(cube,1.08,0.01),0.33),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.38),blend(perturb(residual(perturb(cube,1.08,0.01),0.66),1.15,0.06),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.65),0.57),blend(residual(residual(perturb(cube,1.08,0.01),0.66),0.48),chain(perturb(residual(perturb(cube,1.08,0.01),0.66),1.14,-0.05),square),0.52),0.68)"
+          ],
+          "gen": 8
+        }
+      ]
+    }
+  }
+}
