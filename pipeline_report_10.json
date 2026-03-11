@@ -29,52 +29,49 @@
       "top_transforms": [
         {
           "rank": 1,
-          "name": "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-          "fitness": 7916.0,
+          "name": "blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63)",
+          "fitness": 5545.0,
           "parents": [
-            "mult_2d",
-            "sr_conv1_msg_2D"
+            "chain(softplus,sigmoid)",
+            "blend(sin,silu,0.50)"
           ],
-          "gen": 1
+          "gen": 2
         },
         {
           "rank": 2,
-          "name": "blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45)",
-          "fitness": 7916.0,
+          "name": "perturb(blend(blend(sin,silu,0.50),residual(relu,0.55),0.63),0.95,-0.02)",
+          "fitness": 5545.0,
           "parents": [
-            "sr_conv1_msg_2D",
-            "blend(mult_2d,mult_2d,0.50)"
+            "blend(blend(sin,silu,0.50),residual(relu,0.55),0.63)"
           ],
-          "gen": 2
+          "gen": 3
         },
         {
           "rank": 3,
-          "name": "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-          "fitness": 7916.0,
+          "name": "perturb(blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63),0.97,0.00)",
+          "fitness": 5545.0,
           "parents": [
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-            "silu"
+            "blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63)"
           ],
-          "gen": 2
+          "gen": 3
         },
         {
           "rank": 4,
-          "name": "blend(chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu),blend(mult_2d,sr_conv1_msg_2D,0.52),0.58)",
-          "fitness": 7916.0,
+          "name": "residual(blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63),0.84)",
+          "fitness": 5545.0,
           "parents": [
-            "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)"
+            "blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63)"
           ],
           "gen": 3
         },
         {
           "rank": 5,
-          "name": "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
-          "fitness": 7916.0,
+          "name": "residual(blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63),0.54)",
+          "fitness": 5545.0,
           "parents": [
-            "perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05)"
+            "blend(chain(softplus,sigmoid),blend(sin,silu,0.50),0.63)"
           ],
-          "gen": 4
+          "gen": 3
         }
       ]
     }

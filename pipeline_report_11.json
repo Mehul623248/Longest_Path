@@ -1,0 +1,82 @@
+{
+  "stages": {
+    "training": {
+      "best_epoch": 139,
+      "best_val_loss": 0.0013385711470618844,
+      "best_val_mae": 0.030724073499441146
+    },
+    "symbolic_regression": {
+      "novel_activations_found": 3,
+      "novel_expressions": [
+        {
+          "name": "conv0_msg_2D",
+          "expression": "x1*0.35722908*log(exp(x0) + 1)",
+          "r2": 0.8871780462148311
+        },
+        {
+          "name": "conv1_msg_2D",
+          "expression": "1/(1 + exp(-x1))",
+          "r2": 0.4283201729220574
+        },
+        {
+          "name": "conv2_msg_2D",
+          "expression": "(x1*tanh(log(exp(x1) + 1)))*0.20890324",
+          "r2": 0.024560162307692868
+        }
+      ]
+    },
+    "evolution": {
+      "top_transforms": [
+        {
+          "rank": 1,
+          "name": "blend(blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.61),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.54)",
+          "fitness": 5540.0,
+          "parents": [
+            "blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.61)",
+            "residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33)"
+          ],
+          "gen": 8
+        },
+        {
+          "rank": 2,
+          "name": "blend(blend(blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.61),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.54),blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50),0.61),0.59)",
+          "fitness": 5539.0,
+          "parents": [
+            "blend(blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.61),residual(blend(blend(relu,blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),0.45),residual(residual(perturb(relu,1.09,0.20),0.40),0.49),0.56),0.33),0.54)",
+            "blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50),0.61)"
+          ],
+          "gen": 9
+        },
+        {
+          "rank": 3,
+          "name": "residual(residual(perturb(relu,1.09,0.20),0.40),0.49)",
+          "fitness": 5537.0,
+          "parents": [
+            "residual(perturb(relu,1.09,0.20),0.40)"
+          ],
+          "gen": 3
+        },
+        {
+          "rank": 4,
+          "name": "blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50),0.61)",
+          "fitness": 5537.0,
+          "parents": [
+            "residual(residual(perturb(relu,1.09,0.20),0.40),0.49)",
+            "blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50)"
+          ],
+          "gen": 5
+        },
+        {
+          "rank": 5,
+          "name": "chain(blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50),0.61),add_2d)",
+          "fitness": 5537.0,
+          "parents": [
+            "blend(residual(residual(perturb(relu,1.09,0.20),0.40),0.49),blend(blend(residual(perturb(relu,1.09,0.20),0.80),residual(perturb(relu,1.09,0.20),0.42),0.40),relu,0.50),0.61)",
+            "add_2d"
+          ],
+          "gen": 6
+        }
+      ]
+    }
+  }
+}

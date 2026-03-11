@@ -29,52 +29,52 @@
       "top_transforms": [
         {
           "rank": 1,
-          "name": "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-          "fitness": 7916.0,
+          "name": "perturb(mult_2d,0.90,-0.13)",
+          "fitness": 2490.0,
           "parents": [
-            "mult_2d",
-            "sr_conv1_msg_2D"
+            "mult_2d"
           ],
           "gen": 1
         },
         {
           "rank": 2,
-          "name": "blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45)",
-          "fitness": 7916.0,
+          "name": "chain(perturb(mult_2d,0.90,-0.13),sixth_degree)",
+          "fitness": 2490.0,
           "parents": [
-            "sr_conv1_msg_2D",
-            "blend(mult_2d,mult_2d,0.50)"
+            "perturb(mult_2d,0.90,-0.13)",
+            "sixth_degree"
           ],
           "gen": 2
         },
         {
           "rank": 3,
-          "name": "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-          "fitness": 7916.0,
+          "name": "blend(perturb(chain(perturb(mult_2d,0.90,-0.13),sixth_degree),1.08,0.03),perturb(mult_2d,0.90,-0.13),0.49)",
+          "fitness": 2490.0,
           "parents": [
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-            "silu"
+            "perturb(chain(perturb(mult_2d,0.90,-0.13),sixth_degree),1.08,0.03)",
+            "perturb(mult_2d,0.90,-0.13)"
           ],
-          "gen": 2
+          "gen": 4
         },
         {
           "rank": 4,
-          "name": "blend(chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu),blend(mult_2d,sr_conv1_msg_2D,0.52),0.58)",
-          "fitness": 7916.0,
+          "name": "blend(chain(perturb(mult_2d,0.90,-0.13),sixth_degree),perturb(mult_2d,0.90,-0.13),0.63)",
+          "fitness": 2490.0,
           "parents": [
-            "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)"
+            "chain(perturb(mult_2d,0.90,-0.13),sixth_degree)",
+            "perturb(mult_2d,0.90,-0.13)"
           ],
           "gen": 3
         },
         {
           "rank": 5,
-          "name": "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
-          "fitness": 7916.0,
+          "name": "blend(perturb(mult_2d,0.90,-0.13),chain(perturb(mult_2d,0.90,-0.13),sixth_degree),0.32)",
+          "fitness": 2490.0,
           "parents": [
-            "perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05)"
+            "perturb(mult_2d,0.90,-0.13)",
+            "chain(perturb(mult_2d,0.90,-0.13),sixth_degree)"
           ],
-          "gen": 4
+          "gen": 3
         }
       ]
     }

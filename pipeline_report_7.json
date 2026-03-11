@@ -29,52 +29,49 @@
       "top_transforms": [
         {
           "rank": 1,
-          "name": "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-          "fitness": 7916.0,
+          "name": "perturb(residual(residual(silu_cube,0.73),0.81),0.92,-0.07)",
+          "fitness": -0.006845348514616489,
           "parents": [
-            "mult_2d",
-            "sr_conv1_msg_2D"
+            "residual(residual(silu_cube,0.73),0.81)"
           ],
-          "gen": 1
+          "gen": 3
         },
         {
           "rank": 2,
-          "name": "blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45)",
-          "fitness": 7916.0,
+          "name": "blend(perturb(residual(silu_cube,0.73),0.98,0.06),residual(residual(silu_cube,0.73),0.81),0.41)",
+          "fitness": -0.00978689668700099,
           "parents": [
-            "sr_conv1_msg_2D",
-            "blend(mult_2d,mult_2d,0.50)"
+            "perturb(residual(silu_cube,0.73),0.98,0.06)",
+            "residual(residual(silu_cube,0.73),0.81)"
           ],
-          "gen": 2
+          "gen": 3
         },
         {
           "rank": 3,
-          "name": "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-          "fitness": 7916.0,
+          "name": "perturb(residual(silu_cube,0.73),0.98,0.06)",
+          "fitness": -0.01402282454073429,
           "parents": [
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)",
-            "silu"
+            "residual(silu_cube,0.73)"
           ],
           "gen": 2
         },
         {
           "rank": 4,
-          "name": "blend(chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu),blend(mult_2d,sr_conv1_msg_2D,0.52),0.58)",
-          "fitness": 7916.0,
+          "name": "perturb(residual(residual(silu_cube,0.73),0.81),1.04,-0.01)",
+          "fitness": -0.014061024039983749,
           "parents": [
-            "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
-            "blend(mult_2d,sr_conv1_msg_2D,0.52)"
+            "residual(residual(silu_cube,0.73),0.81)"
           ],
           "gen": 3
         },
         {
           "rank": 5,
-          "name": "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
-          "fitness": 7916.0,
+          "name": "residual(residual(silu_cube,0.73),0.81)",
+          "fitness": -0.014461475610733032,
           "parents": [
-            "perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05)"
+            "residual(silu_cube,0.73)"
           ],
-          "gen": 4
+          "gen": 2
         }
       ]
     }

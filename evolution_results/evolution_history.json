@@ -1,32 +1,62 @@
 [
   {
     "gen": 1,
-    "best_fitness": -0.01496319230645895,
-    "best_name": "cube",
-    "avg_fitness": -0.02713929976336658
+    "best_fitness": 5521.0,
+    "best_name": "relu",
+    "avg_fitness": 4833.88
   },
   {
     "gen": 2,
-    "best_fitness": -0.01496319230645895,
-    "best_name": "cube",
-    "avg_fitness": -0.02156834372319281
+    "best_fitness": 5537.0,
+    "best_name": "chain(sin,adaptive_silu)",
+    "avg_fitness": 5394.52
   },
   {
     "gen": 3,
-    "best_fitness": -0.01402282454073429,
-    "best_name": "perturb(residual(silu_cube,0.73),0.98,0.06)",
-    "avg_fitness": -0.020468367747962474
+    "best_fitness": 5537.0,
+    "best_name": "chain(sin,adaptive_silu)",
+    "avg_fitness": 5393.48
   },
   {
     "gen": 4,
-    "best_fitness": -0.01402282454073429,
-    "best_name": "perturb(residual(silu_cube,0.73),0.98,0.06)",
-    "avg_fitness": -0.022210716474801304
+    "best_fitness": 5537.0,
+    "best_name": "chain(sin,adaptive_silu)",
+    "avg_fitness": 5390.96
   },
   {
     "gen": 5,
-    "best_fitness": -0.006845348514616489,
-    "best_name": "perturb(residual(residual(silu_cube,0.73),0.81),0.92,-0.07)",
-    "avg_fitness": -0.019126879447139804
+    "best_fitness": 5537.0,
+    "best_name": "chain(sin,adaptive_silu)",
+    "avg_fitness": 5272.08
+  },
+  {
+    "gen": 6,
+    "best_fitness": 5538.0,
+    "best_name": "perturb(chain(sin,adaptive_silu),1.14,0.00)",
+    "avg_fitness": 5513.12
+  },
+  {
+    "gen": 7,
+    "best_fitness": 5538.0,
+    "best_name": "perturb(chain(sin,adaptive_silu),1.14,0.00)",
+    "avg_fitness": 5520.8
+  },
+  {
+    "gen": 8,
+    "best_fitness": 5545.0,
+    "best_name": "perturb(perturb(chain(sin,adaptive_silu),1.14,0.00),0.96,-0.03)",
+    "avg_fitness": 5401.56
+  },
+  {
+    "gen": 9,
+    "best_fitness": 5545.0,
+    "best_name": "perturb(perturb(chain(sin,adaptive_silu),1.14,0.00),0.96,-0.03)",
+    "avg_fitness": 5525.08
+  },
+  {
+    "gen": 10,
+    "best_fitness": 5545.0,
+    "best_name": "perturb(perturb(chain(sin,adaptive_silu),1.14,0.00),0.96,-0.03)",
+    "avg_fitness": 5527.76
   }
 ]

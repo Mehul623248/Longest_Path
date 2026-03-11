@@ -1,95 +1,97 @@
 [
   {
     "rank": 1,
-    "name": "perturb(residual(residual(silu_cube,0.73),0.81),0.92,-0.07)",
-    "fitness": -0.006845348514616489,
+    "name": "blend(mult_2d,sr_conv1_msg_2D,0.52)",
+    "fitness": 7916.0,
     "parents": [
-      "residual(residual(silu_cube,0.73),0.81)"
+      "mult_2d",
+      "sr_conv1_msg_2D"
     ],
-    "gen": 3
+    "gen": 1
   },
   {
     "rank": 2,
-    "name": "blend(perturb(residual(silu_cube,0.73),0.98,0.06),residual(residual(silu_cube,0.73),0.81),0.41)",
-    "fitness": -0.00978689668700099,
+    "name": "blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45)",
+    "fitness": 7916.0,
     "parents": [
-      "perturb(residual(silu_cube,0.73),0.98,0.06)",
-      "residual(residual(silu_cube,0.73),0.81)"
+      "sr_conv1_msg_2D",
+      "blend(mult_2d,mult_2d,0.50)"
     ],
-    "gen": 3
+    "gen": 2
   },
   {
     "rank": 3,
-    "name": "perturb(residual(silu_cube,0.73),0.98,0.06)",
-    "fitness": -0.01402282454073429,
+    "name": "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
+    "fitness": 7916.0,
     "parents": [
-      "residual(silu_cube,0.73)"
+      "blend(mult_2d,sr_conv1_msg_2D,0.52)",
+      "silu"
     ],
     "gen": 2
   },
   {
     "rank": 4,
-    "name": "perturb(residual(residual(silu_cube,0.73),0.81),1.04,-0.01)",
-    "fitness": -0.014061024039983749,
+    "name": "blend(chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu),blend(mult_2d,sr_conv1_msg_2D,0.52),0.58)",
+    "fitness": 7916.0,
     "parents": [
-      "residual(residual(silu_cube,0.73),0.81)"
+      "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
+      "blend(mult_2d,sr_conv1_msg_2D,0.52)"
     ],
     "gen": 3
   },
   {
     "rank": 5,
-    "name": "residual(residual(silu_cube,0.73),0.81)",
-    "fitness": -0.014461475610733032,
+    "name": "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
+    "fitness": 7916.0,
     "parents": [
-      "residual(silu_cube,0.73)"
+      "perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05)"
+    ],
+    "gen": 4
+  },
+  {
+    "rank": 6,
+    "name": "chain(perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05),mult_2d)",
+    "fitness": -Infinity,
+    "parents": [
+      "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
+      "mult_2d"
+    ],
+    "gen": 5
+  },
+  {
+    "rank": 7,
+    "name": "blend(perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05),chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu),0.66)",
+    "fitness": -Infinity,
+    "parents": [
+      "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)",
+      "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)"
+    ],
+    "gen": 5
+  },
+  {
+    "rank": 8,
+    "name": "perturb(perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05),0.91,0.01)",
+    "fitness": -Infinity,
+    "parents": [
+      "perturb(perturb(blend(sr_conv1_msg_2D,blend(mult_2d,mult_2d,0.50),0.45),1.02,0.05),0.90,-0.05)"
+    ],
+    "gen": 5
+  },
+  {
+    "rank": 9,
+    "name": "chain(blend(mult_2d,sr_conv1_msg_2D,0.52),silu)",
+    "fitness": -Infinity,
+    "parents": [
+      "blend(mult_2d,sr_conv1_msg_2D,0.52)",
+      "silu"
     ],
     "gen": 2
   },
   {
-    "rank": 6,
-    "name": "cube",
-    "fitness": -0.01496319230645895,
+    "rank": 10,
+    "name": "sixth_degree",
+    "fitness": -Infinity,
     "parents": [],
     "gen": 0
-  },
-  {
-    "rank": 7,
-    "name": "blend(cube,silu_cube,0.60)",
-    "fitness": -0.015071110799908638,
-    "parents": [
-      "cube",
-      "silu_cube"
-    ],
-    "gen": 1
-  },
-  {
-    "rank": 8,
-    "name": "blend(cube,perturb(residual(silu_cube,0.73),0.98,0.06),0.32)",
-    "fitness": -0.015685394406318665,
-    "parents": [
-      "cube",
-      "perturb(residual(silu_cube,0.73),0.98,0.06)"
-    ],
-    "gen": 3
-  },
-  {
-    "rank": 9,
-    "name": "blend(perturb(residual(silu_cube,0.73),0.98,0.06),blend(cube,silu_cube,0.60),0.37)",
-    "fitness": -0.01914891228079796,
-    "parents": [
-      "perturb(residual(silu_cube,0.73),0.98,0.06)",
-      "blend(cube,silu_cube,0.60)"
-    ],
-    "gen": 3
-  },
-  {
-    "rank": 10,
-    "name": "blend(residual(residual(silu_cube,0.73),0.81),cube,0.48)",
-    "fitness": -0.019305473566055296,
-    "parents": [
-      "residual(residual(silu_cube,0.73),0.81)",
-      "cube"
-    ],
-    "gen": 3
   }
 ]

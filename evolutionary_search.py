@@ -1,153 +1,77 @@
-"""
-evolutionary_search.py
-
-Phase 3: Evolutionary search over non-linear transforms.
-
-Takes expressions discovered by symbolic regression and:
-1. Mutates them (perturb parameters, swap operators)
-2. Combines them (compose two activations, take weighted sum)
-3. Evaluates fitness (how well does a GNN with this activation solve longest path?)
-4. Selects best and repeats
-
-This is the "outer loop" that searches the space of transforms.
-Think of it as: symbolic regression finds candidate expressions,
-evolution searches the space *between* those candidates.
-"""
-
 import os
-import copy
 import json
 import random
-import pickle
 import numpy as np
 import torch
-import torch.nn as nn
-from torch_geometric.loader import DataLoader
+import networkx as nx
 from dataclasses import dataclass, field
 from typing import Callable, Optional
-import sympy as sp
-from sympy import symbols, lambdify, sin, cos, exp, log, tanh, sqrt, Abs
-
-from graph_utils import build_dataset
-from kan_gnn import KANGNN
-from train import evaluate
-
 
 # ─────────────────────────────────────────
 # Transform representation
 # ─────────────────────────────────────────
 
-x_sym = symbols('x')
-
-# Primitive building blocks — these get composed and mutated
 PRIMITIVES = [
-    ("relu",      lambda x: torch.relu(x)),
-    ("sigmoid",   lambda x: torch.sigmoid(x)),
-    ("tanh",      lambda x: torch.tanh(x)),
-    ("silu",      lambda x: x * torch.sigmoid(x)),
-    ("sin",       lambda x: torch.sin(x)),
-    ("cos",       lambda x: torch.cos(x)),
-    ("exp_neg",   lambda x: torch.exp(-x.abs())),
-    ("softplus",  lambda x: torch.log1p(torch.exp(x))),
-    ("mish",      lambda x: x * torch.tanh(torch.log1p(torch.exp(x)))),
-    ("square",    lambda x: x ** 2),
-    ("cube",      lambda x: x ** 3),
-    ("inv_sqrt",  lambda x: x / (1 + x.abs()).sqrt()),
-    ("log_abs",   lambda x: torch.log(x.abs() + 1)),
-    ("sinc",      lambda x: torch.sinc(x / np.pi)),
-    ("gaussian",  lambda x: torch.exp(-x ** 2)),
-    ("silu_cube",    lambda x: x * torch.sigmoid(x) + 0.5 * x**3),
-("poly_sigmoid", lambda x: (x**3) / (1 + torch.exp(-x))),
-("sixth_degree", lambda x: x**6 + x**3),
-# Run 3 hybrids — directly from symbolic regression findings
-    ("sixth_silu",    lambda x: torch.clamp(x**6 + x**3, -10, 10) * torch.sigmoid(x)),
-    ("gated_sixth",   lambda x: torch.clamp(x**6, -10, 10) / (1 + torch.exp(-x))),
-    ("cube_sixth",    lambda x: torch.clamp(x**3 + 0.5 * x**6, -10, 10)),
-    ("adaptive_silu", lambda x: x * torch.sigmoid(x * torch.tanh(torch.exp(x * (x - 0.315)).clamp(-10, 10)))),
+    # --- The Basics ---
+    ("relu",         lambda x0, x1=None: torch.relu(x0)),
+    ("sigmoid",      lambda x0, x1=None: torch.sigmoid(x0)),
+    ("tanh",         lambda x0, x1=None: torch.tanh(x0)),
+    ("softplus",     lambda x0, x1=None: torch.log1p(torch.exp(x0))),
+    ("cube",         lambda x0, x1=None: x0 ** 3),
+    
+    # --- The Heavy 1D Hybrids (Weight Gaters) ---
+    ("silu",         lambda x0, x1=None: x0 * torch.sigmoid(x0)),
+    ("silu_cube",    lambda x0, x1=None: x0 * torch.sigmoid(x0) + 0.5 * x0**3),
+    ("sixth_degree", lambda x0, x1=None: x0**6 + x0**3),
+    ("cube_sixth",   lambda x0, x1=None: torch.clamp(x0**3 + 0.5 * x0**6, -10, 10)),
+    ("adaptive_silu",lambda x0, x1=None: x0 * torch.sigmoid(x0 * torch.tanh(torch.exp(x0 * (x0 - 0.315)).clamp(-10, 10)))),
+    
+    # --- The 2D Topology Operators ---
+    ("degree",       lambda x0, x1=None: x1 if x1 is not None else torch.ones_like(x0)),
+    ("add_2d",       lambda x0, x1=None: x0 + (x1 if x1 is not None else 0)),
+    ("mult_2d",      lambda x0, x1=None: x0 * (x1 if x1 is not None else 1)),
 ]
-
 PRIMITIVE_DICT = {name: fn for name, fn in PRIMITIVES}
-
 
 @dataclass
 class Transform:
-    """
-    A candidate non-linear transform, represented both as
-    a callable (for training) and a name (for tracking).
-    """
     name:     str
     fn:       Callable
     fitness:  float = -np.inf
     parents:  list  = field(default_factory=list)
     gen:      int   = 0
 
-    def __call__(self, x: torch.Tensor) -> torch.Tensor:
+    def __call__(self, x0: torch.Tensor, x1: torch.Tensor = None) -> torch.Tensor:
         try:
-            out = self.fn(x)
-            # Safety: clamp to prevent explosion
+            out = self.fn(x0, x1)
             return torch.nan_to_num(out, nan=0.0, posinf=10.0, neginf=-10.0).clamp(-10, 10)
         except Exception:
-            return x  # Fall back to identity
-
+            return x0  
 
 # ─────────────────────────────────────────
 # Genetic operators
 # ─────────────────────────────────────────
 
 def compose(t1: Transform, t2: Transform, blend: float = 0.5) -> Transform:
-    """Compose two transforms: f(x) = blend*t1(x) + (1-blend)*t2(x)."""
-    def fn(x):
-        return blend * t1(x) + (1 - blend) * t2(x)
-    return Transform(
-        name=f"blend({t1.name},{t2.name},{blend:.2f})",
-        fn=fn,
-        parents=[t1.name, t2.name],
-        gen=max(t1.gen, t2.gen) + 1,
-    )
-
+    def fn(x0, x1=None): return blend * t1(x0, x1) + (1 - blend) * t2(x0, x1)
+    return Transform(name=f"blend({t1.name},{t2.name},{blend:.2f})", fn=fn, parents=[t1.name, t2.name], gen=max(t1.gen, t2.gen) + 1)
 
 def chain(t1: Transform, t2: Transform) -> Transform:
-    """Chain two transforms: f(x) = t2(t1(x))."""
-    def fn(x):
-        return t2(t1(x))
-    return Transform(
-        name=f"chain({t1.name},{t2.name})",
-        fn=fn,
-        parents=[t1.name, t2.name],
-        gen=max(t1.gen, t2.gen) + 1,
-    )
-
+    def fn(x0, x1=None): return t2(t1(x0, x1), x1) # pass x1 through!
+    return Transform(name=f"chain({t1.name},{t2.name})", fn=fn, parents=[t1.name, t2.name], gen=max(t1.gen, t2.gen) + 1)
 
 def perturb(t: Transform, noise_scale: float = 0.1) -> Transform:
-    """Add small parametric noise to a transform."""
     alpha = 1.0 + random.gauss(0, noise_scale)
     beta  = random.gauss(0, noise_scale)
-    def fn(x):
-        return t(alpha * x + beta)
-    return Transform(
-        name=f"perturb({t.name},{alpha:.2f},{beta:.2f})",
-        fn=fn,
-        parents=[t.name],
-        gen=t.gen + 1,
-    )
-
+    def fn(x0, x1=None): return t(alpha * x0 + beta, x1)
+    return Transform(name=f"perturb({t.name},{alpha:.2f},{beta:.2f})", fn=fn, parents=[t.name], gen=t.gen + 1)
 
 def residual(t: Transform, scale: float = None) -> Transform:
-    """Add residual connection: f(x) = x + scale*t(x)."""
-    if scale is None:
-        scale = random.uniform(0.1, 1.0)
-    def fn(x):
-        return x + scale * t(x)
-    return Transform(
-        name=f"residual({t.name},{scale:.2f})",
-        fn=fn,
-        parents=[t.name],
-        gen=t.gen + 1,
-    )
-
+    if scale is None: scale = random.uniform(0.1, 1.0)
+    def fn(x0, x1=None): return x0 + scale * t(x0, x1)
+    return Transform(name=f"residual({t.name},{scale:.2f})", fn=fn, parents=[t.name], gen=t.gen + 1)
 
 def mutate(t: Transform) -> Transform:
-    """Apply a random mutation to a transform."""
     ops = [
         lambda: perturb(t),
         lambda: residual(t),
@@ -156,81 +80,54 @@ def mutate(t: Transform) -> Transform:
     ]
     return random.choice(ops)()
 
-
 # ─────────────────────────────────────────
-# Fitness evaluation
+# Fitness evaluation (Beam Search Proxy)
 # ─────────────────────────────────────────
 
-class TransformGNN(nn.Module):
-    """
-    Simplified GNN that uses a fixed (non-learned) transform
-    as its activation function. Used for fast fitness evaluation.
-    """
-    def __init__(self, transform: Transform, hidden: int = 16):
-        super().__init__()
-        self.transform = transform
-        self.lin1 = nn.Linear(3, hidden)
-        self.lin2 = nn.Linear(hidden, hidden)
-        self.lin3 = nn.Linear(hidden * 2, 1)
+def evaluate_transform_beam(transform: Transform, eval_graphs: list, beam_width: int = 3) -> float:
+    total_true_score = 0.0
+    
+    for G in eval_graphs:
+        start_node = 0
+        n = G.number_of_nodes()
+        beam = [(0.0, 0.0, start_node, {start_node})]
+        best_true_score = 0.0
 
-    def forward(self, x, edge_index, batch, edge_attr=None): 
-        from torch_geometric.nn import global_mean_pool, global_max_pool
-        from torch_geometric.utils import add_self_loops
-
-        h = self.transform(self.lin1(x))
-
-        # Simple mean-aggregation message passing using PyG built-in
-        row, col = edge_index
-        num_nodes = x.size(0)
-        # Aggregate neighbor features via mean pooling per node
-        ones = torch.ones(col.size(0), 1, device=x.device)
-        deg = torch.zeros(num_nodes, 1, device=x.device).scatter_add_(0, row.unsqueeze(1), ones).clamp(min=1)
-        agg = torch.zeros(num_nodes, h.size(1), device=x.device).scatter_add_(0, row.unsqueeze(1).expand(-1, h.size(1)), h[col])
-        agg = agg / deg
-
-        h = self.transform(self.lin2(agg))
-
-        h_mean = global_mean_pool(h, batch)
-        h_max  = global_max_pool(h, batch)
-        return torch.sigmoid(self.lin3(torch.cat([h_mean, h_max], dim=1))).squeeze(-1)
-
-
-def evaluate_transform(
-    transform: Transform,
-    train_loader: DataLoader,
-    val_loader:   DataLoader,
-    device:       torch.device,
-    epochs:       int = 30,
-) -> float:
-    """
-    Train a small GNN with this transform and return validation loss.
-    Lower = better. Returns infinity on failure.
-    """
-    try:
-        model = TransformGNN(transform).to(device)
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-        criterion = nn.HuberLoss()
-
-        model.train()
-        for _ in range(epochs):
-            for batch in train_loader:
-                batch = batch.to(device)
-                optimizer.zero_grad()
-                pred = model(batch.x, batch.edge_index, batch.batch)
-                loss = criterion(pred, batch.y)
-                if torch.isnan(loss):
-                    return float("inf")
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-                optimizer.step()
-
-        val_loss, _ = evaluate(model, val_loader, device, criterion)
-        return val_loss
-
-    except Exception as e:
-        print(f"  [ERROR] Transform failed: {e}")
-        return float("inf")
-
+        while beam:
+            next_beam = []
+            for heur_score, true_score, current_node, visited in beam:
+                neighbors = [nx_n for nx_n in G.neighbors(current_node) if nx_n not in visited]
+                
+                if not neighbors:
+                    if true_score > best_true_score:
+                        best_true_score = true_score
+                    continue
+                    
+                for neighbor in neighbors:
+                    raw_weight = float(G[current_node][neighbor].get('weight', 1.0))
+                    raw_degree = float(len(list(G.neighbors(neighbor))))
+                    
+                    x0 = torch.tensor([raw_weight / 10.0])
+                    x1 = torch.tensor([raw_degree / max(n - 1, 1)])
+                    
+                    try:
+                        n_heur = transform(x0, x1).item()
+                    except Exception:
+                        n_heur = float('-inf')
+                        
+                    next_beam.append((
+                        heur_score + n_heur,
+                        true_score + raw_weight,
+                        neighbor,
+                        visited | {neighbor}
+                    ))
+            
+            next_beam.sort(key=lambda x: x[0], reverse=True)
+            beam = next_beam[:beam_width]
+            
+        total_true_score += best_true_score
+        
+    return total_true_score
 
 # ─────────────────────────────────────────
 # Evolutionary loop
@@ -245,42 +142,38 @@ def run_evolution(
     eval_epochs:     int = 20,
     seed_expressions: Optional[list] = None,
     output_dir:      str = "evolution_results",
-    device_str:      str = "cuda",
 ) -> list:
-    """
-    Main evolutionary search loop.
-    
-    seed_expressions: list of (name, callable) tuples from symbolic regression
-    """
     os.makedirs(output_dir, exist_ok=True)
-    device = torch.device(device_str if torch.cuda.is_available() else "cpu")
     random.seed(42)
     np.random.seed(42)
 
-    # ── Dataset (small for fast eval) ──
-    print("Building evaluation dataset...")
-    dataset = build_dataset(num_graphs=400, min_nodes=5, max_nodes=12, verbose=False)
-    split = int(0.8 * len(dataset))
-    train_loader = DataLoader(dataset[:split], batch_size=32, shuffle=True)
-    val_loader   = DataLoader(dataset[split:], batch_size=32)
+    print("Building Beam Search evaluation graphs...")
+    eval_graphs = []
+    for _ in range(50):
+        # --- CHANGED: p=0.12 creates a sparse graph with dead-end traps ---
+        G = nx.erdos_renyi_graph(n=100, p=0.025) 
+        
+        # Ensure the graph isn't completely fractured into tiny pieces
+        while not nx.is_connected(G):
+            G = nx.erdos_renyi_graph(n=100, p=0.025)
+            
+        for (u, v) in G.edges():
+            G.edges[u, v]['weight'] = float(np.random.randint(1, 10))
+        eval_graphs.append(G)
 
-    # ── Initial population ──
     print(f"\nInitializing population of {population_size}...")
     population = [Transform(name, fn) for name, fn in PRIMITIVES]
 
-    # Seed with expressions from symbolic regression
     if seed_expressions:
         for name, fn in seed_expressions:
-            population.append(Transform(f"sr_{name}", fn))
+            population.append(Transform(name, fn))
 
-    # Fill up with mutations of primitives
     while len(population) < population_size:
         base = random.choice(population[:len(PRIMITIVES)])
         population.append(mutate(base))
 
     population = population[:population_size]
 
-    # ── Evolution ──
     history = []
     n_elite = max(1, int(elite_frac * population_size))
 
@@ -288,13 +181,11 @@ def run_evolution(
     for gen in range(generations):
         print(f"\nGeneration {gen+1}/{generations}")
 
-        # Evaluate fitness
         for i, t in enumerate(population):
-            if t.fitness == -np.inf:  # Only evaluate if not already scored
-                t.fitness = -evaluate_transform(t, train_loader, val_loader, device, eval_epochs)
+            if t.fitness == -np.inf:
+                t.fitness = evaluate_transform_beam(t, eval_graphs, beam_width=1)
                 print(f"  [{i+1}/{len(population)}] {t.name[:50]:50s}  fitness={t.fitness:.4f}")
 
-        # Sort by fitness (higher = better)
         population.sort(key=lambda t: t.fitness, reverse=True)
 
         best = population[0]
@@ -302,23 +193,8 @@ def run_evolution(
         print(f"  Best: {best.name[:60]}  fitness={best.fitness:.4f}")
         print(f"  Avg fitness: {avg:.4f}")
 
-        history.append({
-            "gen":          gen + 1,
-            "best_fitness": best.fitness,
-            "best_name":    best.name,
-            "avg_fitness":  float(avg),
-        })
-
-        # Save checkpoint
-        with open(os.path.join(output_dir, "evolution_history.json"), "w") as f:
-            json.dump(history, f, indent=2)
-
-        if gen == generations - 1:
-            break
-
-        # ── Selection + reproduction ──
         elites = population[:n_elite]
-        new_pop = list(elites)  # Elites survive unchanged
+        new_pop = list(elites)
 
         while len(new_pop) < population_size:
             r = random.random()
@@ -329,19 +205,16 @@ def run_evolution(
                 parent = random.choice(elites)
                 child = mutate(parent)
             else:
-                # New random primitive
                 name, fn = random.choice(PRIMITIVES)
                 child = Transform(name, fn)
                 child.fitness = -np.inf
 
-            # Reset fitness for new individuals
             if child.name not in [t.name for t in elites]:
                 child.fitness = -np.inf
             new_pop.append(child)
 
         population = new_pop[:population_size]
 
-    # ── Final results ──
     population.sort(key=lambda t: t.fitness, reverse=True)
 
     results = [
@@ -360,10 +233,5 @@ def run_evolution(
 
     return population
 
-
 if __name__ == "__main__":
-    run_evolution(
-        population_size=20,
-        generations=10,
-        eval_epochs=15,
-    )
+    run_evolution(population_size=20, generations=10)
