@@ -1,6 +1,7 @@
 # Neuro-Symbolic Graph Routing
 
 **Evolving Topology-Aware Heuristics via B-Spline Networks and Genetic Algorithms** 
+
 Author: Mehul Murali
 
 ## 1. Project Overview
