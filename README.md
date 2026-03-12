@@ -12,7 +12,7 @@ By training a custom Graph Neural Network (KAN-GNN) on randomized mazes, distill
 
 ## 2. Theoretical Context
 
-This pipeline operationalizes the hypothesis that there exists some transform $T$ such that:
+This pipeline looks into the hypothesis that there exists some transform $T$ such that:
 
 T(graph structure)→low-dimensional space where longest path is "visible"
 
