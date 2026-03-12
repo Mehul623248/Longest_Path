@@ -93,9 +93,9 @@ Small-world networks consist of tightly clustered, isolated neighborhoods. The A
 
 *Significance: Eq2 vs Survival (p = 0.525) → Statistical Tie*
 
-### Conclusion: The "No Free Lunch" Theorem
+### Conclusion: 
 
-The statistical results perfectly demonstrate the *No Free Lunch Theorem* and the limits of OOD generalization. Because the pipeline relies on mechanistic interpretability (outputting explicit math rather than black-box matrices), we can definitively prove *why* the heuristic dominates random mazes and *why* it ties on scale-free super-hubs. It confirms that the neuro-symbolic architecture successfully reverse-engineered the exact mathematical physics of its specific training environment.
+Because the pipeline relies on mechanistic interpretability (outputting explicit math rather than black-box matrices), we can definitively prove *why* the heuristic dominates random mazes and *why* it ties on scale-free super-hubs. It confirms that the neuro-symbolic architecture successfully reverse-engineered the exact mathematical physics of its specific training environment.
 
 ## 6. Setup and Installation
 
